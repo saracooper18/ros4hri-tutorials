@@ -1,4 +1,12 @@
 {
+    "forwardPorts": [
+        6080
+    ],
+    "portsAttributes": {
+        "6080": {
+            "label": "desktop"
+        }
+    },
     "features": {
         "ghcr.io/devcontainers/features/desktop-lite:1": {}
     }

@@ -2,10 +2,11 @@
 
 ## Start the GitHub Codespaces
 
-1. Fork this repository to your own account
-2. Start the Github Codespaces by clicking on `Code`, then `Codespaces`
+Start the Github Codespaces by clicking on `Code`, then `Codespaces`.
 
 ### Connect to the remote desktop
+
+![Port forwarding](images/vscode-ports.png)
 
 In the Codespaces' VSCode interface, click on the `PORTS` tab (next to
 `TERMINAL`), and click on the *Forwarded Address* URL next to the `6080` port forward. Click on the
@@ -28,7 +29,7 @@ In the terminal of your Codespaces, type:
 sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
 curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
 sudo apt update
-sudo apt install ros-noetic-ros-base python3-rosdep python3-catkin-tools ros-noetic-rviz ros-noetic-rqt-image-viewer
+sudo apt install ros-noetic-ros-base python3-rosdep python3-catkin-tools ros-noetic-rviz ros-noetic-rqt-image-view
 ```
 
 We will also create a basic ROS workspace, so that we can compile ROS nodes:
@@ -73,7 +74,7 @@ Open yet another termnial, source ROS, an open `rqt_image_view`:
 
 ```
 source /opt/ros/noetic/setup.bash
-rosrun rqt_image_view rqt_image_view
+rqt_image_view
 ```
 
 Switch to the remote desktop tab. You should see the RQT `image_view`
@@ -82,6 +83,18 @@ should display the video stream.
 
 ![rqt_image_view](images/rqt_image_view.png)
 
+We can alos visualize the bag file in `rviz`, the main ROS tool for data
+visualization. Stop `rqt_image_view` (either close the window, or press Ctrl+C
+in the terminal), and start `rviz` instead:
+
+```
+rviz
+```
+
+*Add* an `Image` plugin, and select the `/usb_cam/image_raw` topic like on the
+screenshot below:
+
+![rviz](images/rviz.png)
 
 ### Install hri_face_detect
 

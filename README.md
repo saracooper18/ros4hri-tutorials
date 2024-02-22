@@ -27,7 +27,7 @@ ROS tools that we need. We only add the `catkin` command-line tool:
 
 ```
 sudo apt update
-sudo apt install python3-pip python3-catkin-tools
+sudo apt install wget python3-pip python3-catkin-tools
 ```
 
 Next, we create a basic ROS *workspace*, so that we can compile ROS nodes:
@@ -64,7 +64,18 @@ Then, start `roscore`
 roscore
 ```
 
-### Display the test bag file
+### Download the bag files
+
+I have prepared some bags for today's tutorial. Download them with `wget`:
+
+```
+cd bags
+wget https://skadge.org/data/severin-head.bag
+wget https://skadge.org/data/severin-sitting-table.bag
+cd ..
+```
+
+### Display the content of the bag file
 
 Open a new terminal by clicking on the `+` at the right of the termnial panel.
 
@@ -72,7 +83,7 @@ Source the ROS environment, and play the pre-recorded bag file:
 
 ```
 source /opt/ros/noetic/setup.bash
-rosbag play --loop bags/severin-train.bag
+rosbag play --loop bags/severin-head.bag
 ```
 
 Type `rostopic list` to list the available ROS topic (ie, the ROS data
@@ -150,7 +161,7 @@ Then, you can start the face detection node, remapping the default image topic
 to the one actually published by the camera:
 
 ```
-rosrun hri_face_detect detect image:=/usb_cam/image_raw
+roslaunch hri_face_detect detect.launch rgb_camera:=usb_cam filtering_frame:=head_camera
 ```
 
 You should immediately see on the console that some faces are indeed detected.
@@ -158,6 +169,8 @@ Let's visualise them.
 
 
 #### Visualising the result
+
+Open another terminal, and source ROS.
 
 We can check that the faces are detected and published at ROS message by simply typing:
 
@@ -172,15 +185,16 @@ install the `rviz` ROS4HRI plugin:
 sudo apt install ros-noetic-hri-rviz
 ```
 
-Then, start `rviz` and enable the `Humans` plugins:
+Then, start `rviz`, set the fixed frame to `head_camera`, and enable the `Humans` and TF plugins:
 
 ![rviz human plugin](images/rviz-humans-plugin.png)
 
-Configure the plugin to use the `/usb_cam/image_raw` topic. You should see the
-faces being displayed:
+Configure the `Humans` plugin to use the `/usb_cam/image_raw` topic. You should see the
+face being displayed, as well as its estimated 6D position:
 
 ![rviz displaying faces](images/rviz-faces.png)
 
+We are effectively running the face detector in a Docker container, running in a virtual machine somewhere in a Github datacentre!
 
 ### Install hri_fullbody
 
@@ -201,6 +215,7 @@ cd ..
 Then, let's install the dependencies:
 
 ```
+pip3 install ikpy
 rosdep install -r -y --from-paths src
 ```
 

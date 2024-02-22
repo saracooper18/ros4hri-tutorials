@@ -42,6 +42,15 @@ sudo rosdep init
 rosdep update
 ```
 
+We are also going to configure the container so that it always uses the default
+Ubuntu Python:
+
+```
+mv /usr/local/python /usr/local/python-bak
+sudo mv /usr/local/python /usr/local/python-bak
+sudo mv /opt/conda /opt/conda-bak
+```
+
 ### Start ROS
 
 In the same terminal, source your ROS environment:
@@ -123,5 +132,58 @@ Finally, build it:
 
 ```
 catkin build hri_face_detect
+```
+
+#### Visualising the result
+
+We can check that the faces are detected and published at ROS message by simply typing:
+
+```
+rostopic echo /humans/faces/tracked
+```
+
+We can also use `rviz` to display the faces with the facial landmarks. First,
+install the `rviz` ROS4HRI plugin:
+
+```
+sudo apt install ros-noetic-hri-rviz
+```
+
+Then, start `rviz` and enable the `Humans` plugins:
+
+![rviz human plugin](images/rviz-humans-plugin.png)
+
+Configure the plugin to use the `/usb_cam/image_raw` topic. You should see the
+faces being displayed:
+
+![rviz displaying faces](images/rviz-faces.png)
+
+
+### Install hri_fullbody
+
+Next, let's detect 3D skeletons in the image.
+
+We will use the ROS4HRI-compatible [`hri_fullbody`](https://github.com/ros4hri/hri_fullbody/) node.
+
+To install it:
+
+First, let's get the code:
+
+```
+cd ws/src
+git clone https://github.com/ros4hri/hri_fullbody.git
+cd ..
+```
+
+Then, let's install the dependencies:
+
+```
+rosdep install -r -y --from-paths src
+```
+
+Finally, build it:
+
+```
+catkin build hri_fullbody
 ```
 

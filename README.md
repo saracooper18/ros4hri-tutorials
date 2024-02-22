@@ -168,7 +168,7 @@ You should immediately see on the console that some faces are indeed detected.
 Let's visualise them.
 
 
-#### Visualising the result
+#### Visualise the result
 
 Open another terminal, and source ROS.
 
@@ -223,5 +223,60 @@ Finally, build it:
 
 ```
 catkin build hri_fullbody
+```
+
+### Start the body detection
+
+First, go back to the terminal playing the bag file. Stop it (Ctrl+C), and start
+the second bag file:
+
+```
+rosbag play --loop --clock severin-sitting-table.bag
+```
+
+Now, open a new terminal, and source `install/setup.bash` (this will also
+automatically source `/opt/ros/noetic.setup.bash`):
+
+```
+cd ws
+source install/setup.bash
+```
+
+Start the body detector:
+
+```
+roslaunch hri_fullbody detect.launch rgb_camera:=usb_cam
+```
+
+Re-open the browser tab with `rviz`: you should now see the skeleton being
+detected, in addition to the face:
+
+![Body and face, visualised in rviz](images/body-face.png)
+
+## 'Assembling' full persons
+
+Now that we have a face and a body, we can build a 'full' person.
+
+![ROS4HRI IDs](images/ros4hri-ids.png)
+
+Until now, we were running two ROS4HRI perception module: `hri_face_detect` and
+`hri_fullbody`.
+
+The face detector is assigning a unique identifier to each face that it
+detects (and since it only *detects* faces, but does not *recognise* them, a
+new identifier might get assigned to the same actual face if it disappears and
+reappears later); the body detector is doing the same thing for bodies.
+
+Next, we are going to run a node dedicated to managing full *persons*. Persons
+are also assigned an identifier, but the person identifier is meant to be permanent.
+
+Let install `hri_person_manager`:
+
+```
+cd ws/src
+git clone https://github.com/ros4hri/hri_person_manager.git
+cd ..
+rosdep install -r -y --from-paths src
+catkin build hri_person_manager
 ```
 

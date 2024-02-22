@@ -19,37 +19,33 @@ that you start from the Codespaces' terminal (like `rviz`) will open in the remo
 
 ## Prepare the environment
 
-### Install ROS noetic
+### Initial environment preparation
 
-We can follow the official [installation instructions](http://wiki.ros.org/noetic/Installation/Ubuntu).
-
-In the terminal of your Codespaces, type:
+Your environment (called a *devcontainer*) is based on [ROS
+noetic](http://wiki.ros.org/noetic). It already contains almost all the standard
+ROS tools that we need. We only add the `catkin` command-line tool:
 
 ```
-sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
-curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
 sudo apt update
-sudo apt install ros-noetic-ros-base python3-rosdep python3-catkin-tools ros-noetic-rviz ros-noetic-rqt-image-view
+sudo apt install python3-pip python3-catkin-tools
 ```
 
-We will also create a basic ROS workspace, so that we can compile ROS nodes:
+Next, we create a basic ROS *workspace*, so that we can compile ROS nodes:
 
 ```
 mkdir -p ws/src
 cd ws
 catkin init
-sudo rosdep init
+catkin config --install
+cd ..
 rosdep update
 ```
 
-We are also going to configure the container so that it always uses the default
-Ubuntu Python:
+## Playing ROS 'bags'
 
-```
-mv /usr/local/python /usr/local/python-bak
-sudo mv /usr/local/python /usr/local/python-bak
-sudo mv /opt/conda /opt/conda-bak
-```
+ROS bags are files containing ROS data (ROS *messages*) that have been
+previously recorded. We can *play* ROS bag to re-create the datastream as they
+were when they were recorded.
 
 ### Start ROS
 
@@ -79,7 +75,11 @@ source /opt/ros/noetic/setup.bash
 rosbag play --loop bags/severin-train.bag
 ```
 
-Open yet another termnial, source ROS, an open `rqt_image_view`:
+Type `rostopic list` to list the available ROS topic (ie, the ROS data
+channels). You should see at least `/usb_cam/image_raw` that contains the raw
+image pixels data.
+
+Open yet another terminal, source ROS, and open `rqt_image_view`:
 
 ```
 source /opt/ros/noetic/setup.bash
@@ -104,6 +104,9 @@ rviz
 screenshot below:
 
 ![rviz](images/rviz.png)
+
+
+## Face detection
 
 ### Install hri_face_detect
 
@@ -133,6 +136,26 @@ Finally, build it:
 ```
 catkin build hri_face_detect
 ```
+
+### Start the face detection node
+
+The `hri_face_detect` node has been installed in the `install/` subfolder. We
+need to tell ROS to look into that folder when starting a node. Type:
+
+```
+source ./install/setup.bash
+```
+
+Then, you can start the face detection node, remapping the default image topic
+to the one actually published by the camera:
+
+```
+rosrun hri_face_detect detect image:=/usb_cam/image_raw
+```
+
+You should immediately see on the console that some faces are indeed detected.
+Let's visualise them.
+
 
 #### Visualising the result
 

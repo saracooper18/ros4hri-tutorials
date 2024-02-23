@@ -22,16 +22,10 @@ that you start from the Codespaces' terminal (like `rviz`) will open in the remo
 ### Initial environment preparation
 
 Your environment (called a *devcontainer*) is based on [ROS
-noetic](http://wiki.ros.org/noetic). It already contains almost all the standard
-ROS tools that we need. Let's add a couple of additional packages required for
-this tutorial:
+noetic](http://wiki.ros.org/noetic) with [some additional
+tools](.devcontainer/Dockerfile). It is ready to use for our tutorial.
 
-```
-sudo apt update
-sudo apt install evince python3-graphviz wget python3-pip python3-catkin-tools
-```
-
-Next, we create a basic ROS *workspace*, so that we can compile ROS nodes:
+Let's simply create a basic ROS *workspace*, so that we can compile ROS nodes:
 
 ```
 mkdir -p ws/src
@@ -39,7 +33,6 @@ cd ws
 catkin init
 catkin config --install
 cd ..
-rosdep update
 ```
 
 ## Playing ROS 'bags'
@@ -79,6 +72,9 @@ cd ..
 ### Display the content of the bag file
 
 Open a new terminal by clicking on the `+` at the right of the termnial panel.
+
+**Tip: you can rename your terminals by right-clicking on them. For instance, name the first
+one `roscore` and the second one `bags`.
 
 Source the ROS environment, and play the pre-recorded bag file:
 

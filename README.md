@@ -250,7 +250,7 @@ source install/setup.bash
 Start the body detector:
 
 ```
-roslaunch hri_fullbody detect.launch rgb_camera:=usb_cam
+roslaunch hri_fullbody hri_fullbody.launch rgb_camera:=usb_cam
 ```
 
 Re-open the browser tab with `rviz`: you should now see the skeleton being
@@ -275,7 +275,15 @@ reappears later); the body detector is doing the same thing for bodies.
 Next, we are going to run a node dedicated to managing full *persons*. Persons
 are also assigned an identifier, but the person identifier is meant to be permanent.
 
-Let install `hri_person_manager`:
+First, to avoid generating too many new people, we are going to only publish the
+few same frames from the video. Switch back to your `rosbag` terminal. Stop the
+current bag (Ctrl+C), and run:
+
+```
+rosbag play --loop --clock -s 3 -u 1 severin-sitting-table.bag
+```
+
+Then, open a new terminal and install `hri_person_manager`:
 
 ```
 cd ws/src
@@ -298,10 +306,28 @@ rosrun hri_person_manager hri_person_manager
 If the face and body detector are still running, you might see that
 `hri_person_manager` is already creating some *anonymous* persons: the node
 knows that some persons must exist (since faces and bodies are detected), but it
-does not know *who* these persons are.
+does not know *who* these persons are (you can ignore the warning regarding TF
+frames: they come from the use of bag files instead of real 'live' data).
 
-For that, we need a node able to match for instance a *face* to a unique and
+To get 'real' people, we need a node able to match for instance a *face* to a unique and
 stable *person*: a face identification node.
+
+### Display the person feature graph
+
+We can use a small utility tool to display what the person manager understand of
+the current situation.
+
+Open a new terminal and run:
+
+```
+source /opt/ros/noetic/setup.bash
+cd ws/src/hri_person_manager/scripts/
+./show_humans_graph.py & evince /tmp/graph.pdf
+```
+
+You should see a graph similar to:
+
+![ROS4HRI graph](images/ros4hri-graph.png)
 
 ### 'Manual' face identification
 

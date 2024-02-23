@@ -82,7 +82,9 @@ cd ..
 > Then, start it, **with the provided calibration file** (or your own, if you
 > have a calibrated camera):
 >
-> ```rosrun usb_cam usb_cam_node _camera_info_url:="file:///`pwd`/default_webcam_calibration.yml"
+> ```
+> rosrun usb_cam usb_cam_node _camera_info_url:="file:///`pwd`/default_webcam_calibration.yml"
+> ```
 
 ### Display the content of the bag file
 

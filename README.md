@@ -49,8 +49,8 @@ In the same terminal, source your ROS environment:
 source /opt/ros/noetic
 ```
 
-**Note: each time you open a new terminal, you first need to source your ROS
-environment with this command.**
+> 💡 each time you open a new terminal, you first need to source your ROS
+>  environment with this command.
 
 Then, start `roscore`
 
@@ -62,6 +62,12 @@ roscore
 
 I have prepared some bags for today's tutorial. Download them with `wget`:
 
+First, open a new terminal by clicking on the `+` at the right of the terminal
+panel.
+
+> 💡 you can rename your terminals by right-clicking on them. For instance,
+> name the first one `roscore` and the second one `bags`.
+
 ```
 cd bags
 wget https://skadge.org/data/severin-head.bag
@@ -71,10 +77,6 @@ cd ..
 
 ### Display the content of the bag file
 
-Open a new terminal by clicking on the `+` at the right of the termnial panel.
-
-**Tip: you can rename your terminals by right-clicking on them. For instance, name the first
-one `roscore` and the second one `bags`.
 
 Source the ROS environment, and play the pre-recorded bag file:
 
@@ -132,18 +134,16 @@ git clone https://github.com/ros4hri/hri_face_detect.git
 cd ..
 ```
 
-Then, let's install the dependencies:
-
-```
-pip3 install mediapipe
-rosdep install -r -y --from-paths src
-```
-
-Finally, build it:
+Then, build it:
 
 ```
 catkin build hri_face_detect
 ```
+
+> 💡 all the dependencies are already included in your container, so the
+> build step should work straight away. Otherwise, you would have had to install
+> manually `mediapipe` (`pip3 install mediapipe`) and all the other ROS
+> dependencies (`rosdep install -r -y --from-paths src`).
 
 ### Start the face detection node
 
@@ -209,18 +209,15 @@ git clone https://github.com/ros4hri/hri_fullbody.git
 cd ..
 ```
 
-Then, let's install the dependencies:
 
-```
-pip3 install ikpy
-rosdep install -r -y --from-paths src
-```
-
-Finally, build it:
+Then, build it:
 
 ```
 catkin build hri_fullbody
 ```
+
+> 💡 again, all the dependencies are already installed. To do it manually: `pip3
+> install mediapipe ikpy` followed by `rosdep install -r -y --from-paths src`.
 
 ### Start the body detection
 
@@ -273,7 +270,6 @@ Let install `hri_person_manager`:
 cd ws/src
 git clone https://github.com/ros4hri/hri_person_manager.git
 cd ..
-rosdep install -r -y --from-paths src
 catkin build hri_person_manager
 ```
 

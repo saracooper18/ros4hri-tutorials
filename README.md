@@ -329,7 +329,27 @@ You should see a graph similar to:
 
 ![ROS4HRI graph](images/ros4hri-graph.png)
 
-### 'Manual' face identification
+### Connecting the person feature graph
+
+First, let's manually tell `hri_person_manager` that the face and body are
+indeed parts of the same person. TO do so, we need to publish a *match* between
+the two ids (in this example, `rlkas` (the face) and `mnavu` (the body), but
+your IDs might be different, as they are randomly chosen)
+
+In a new terminal (with ROS sourced):
+
+```
+rostopic pub /humans/candidate_matches hri_msgs/IdsMatch "{id1: 'rlkas', id1_type: 2, id2: 'mnavu', id2_type: 3, confidenc
+e: 0.9}"
+```
+
+> ⚠️  do not forget to change the face and body IDs to match the ones in your system!
+
+> 💡 the values `2` and `3` correspond respectively to a face and a body. See
+> [hri_msgs/IdsMatch](https://github.com/ros4hri/hri_msgs/blob/master/msg/IdsMatch.msg)
+> for the list of constants.
+
+
 
 Before doing it automatically with a dedicated node, let's do it manually, to
 understand how this work.

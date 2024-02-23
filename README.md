@@ -46,7 +46,7 @@ were when they were recorded.
 In the same terminal, source your ROS environment:
 
 ```
-source /opt/ros/noetic
+source /opt/ros/noetic/setup.bash
 ```
 
 > 💡 each time you open a new terminal, you first need to source your ROS
@@ -69,6 +69,7 @@ panel.
 > name the first one `roscore` and the second one `bags`.
 
 ```
+mkdir bags
 cd bags
 wget https://skadge.org/data/severin-head.bag
 wget https://skadge.org/data/severin-sitting-table.bag
@@ -148,6 +149,7 @@ cd ..
 Then, build it:
 
 ```
+source /opt/ros/noetic/setup.bash
 catkin build hri_face_detect
 ```
 
@@ -186,14 +188,8 @@ We can check that the faces are detected and published at ROS message by simply 
 rostopic echo /humans/faces/tracked
 ```
 
-We can also use `rviz` to display the faces with the facial landmarks. First,
-install the `rviz` ROS4HRI plugin:
-
-```
-sudo apt install ros-noetic-hri-rviz
-```
-
-Then, start `rviz`, set the fixed frame to `head_camera`, and enable the `Humans` and TF plugins:
+We can also use `rviz` to display the faces with the facial landmarks.
+Then, in `rviz`, set the fixed frame to `head_camera`, and enable the `Humans` and TF plugins:
 
 ![rviz human plugin](images/rviz-humans-plugin.png)
 

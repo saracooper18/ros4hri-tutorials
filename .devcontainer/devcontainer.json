@@ -1,5 +1,6 @@
 {
-    "image": "osrf/ros:noetic-desktop",
+    //"image": "osrf/ros:noetic-desktop",
+    "dockerFile": "Dockerfile",
     "forwardPorts": [
         6080
     ],

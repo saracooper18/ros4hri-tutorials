@@ -29,7 +29,10 @@ RUN apt-get update && apt-get install -y \
     ros-noetic-catkin \
     python3-scipy \
     pybind11-dev \
-    ros-noetic-hri \ 
+    libdlib-dev \
+    libblas-dev \
+    liblapack-dev \
+    ros-noetic-hri \
     ros-noetic-rospy
 
 RUN rosdep update

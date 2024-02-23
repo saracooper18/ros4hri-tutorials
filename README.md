@@ -75,6 +75,15 @@ wget https://skadge.org/data/severin-sitting-table.bag
 cd ..
 ```
 
+> 💡 if you are running this tutorial on your computer directly (ie, not in a
+> devcontainer, you can use your webcam directly (instead of the bags file):
+> 
+> First install `usb_cam`: `apt install ros-noetic-usb-cam`
+> Then, start it, **with the provided calibration file** (or your own, if you
+> have a calibrated camera):
+>
+> ```rosrun usb_cam usb_cam_node _camera_info_url:="file:///`pwd`/default_webcam_calibration.yml"
+
 ### Display the content of the bag file
 
 

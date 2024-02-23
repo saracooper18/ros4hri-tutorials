@@ -318,8 +318,14 @@ Open a new terminal and run:
 ```
 source /opt/ros/noetic/setup.bash
 cd ws/src/hri_person_manager/scripts/
-./show_humans_graph.py & evince /tmp/graph.pdf
+./show_humans_graph.py
 ```
+
+In a different terminal, run:
+
+```
+ evince /tmp/graph.pdf
+ ```
 
 You should see a graph similar to:
 

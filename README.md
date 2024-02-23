@@ -339,9 +339,12 @@ your IDs might be different, as they are randomly chosen)
 In a new terminal (with ROS sourced):
 
 ```
-rostopic pub /humans/candidate_matches hri_msgs/IdsMatch "{id1: 'rlkas', id1_type: 2, id2: 'mnavu', id2_type: 3, confidenc
-e: 0.9}"
+rostopic pub /humans/candidate_matches hri_msgs/IdsMatch "{id1: 'rlkas', id1_type: 2, id2: 'mnavu', id2_type: 3, confidence: 0.9}"
 ```
+
+The graph updates to:
+
+![ROS4HRI graph](images/ros4hri-graph-2.png)
 
 > ⚠️  do not forget to change the face and body IDs to match the ones in your system!
 
@@ -349,12 +352,57 @@ e: 0.9}"
 > [hri_msgs/IdsMatch](https://github.com/ros4hri/hri_msgs/blob/master/msg/IdsMatch.msg)
 > for the list of constants.
 
+### Manually identifying the person
 
+To turn our *anonymous* person into a known person, we need to match the face ID
+(or the body ID) to a person ID:
 
-Before doing it automatically with a dedicated node, let's do it manually, to
-understand how this work.
+For instance:
+
+```
+rostopic pub /humans/candidate_matches hri_msgs/IdsMatch "{id1: 'rlkas', id1_type: 2, id2: 'severin', id2_type: 0, confidence: 0.9}"
+```
+
+The graph updates to:
+
+![ROS4HRI graph](images/ros4hri-graph-3.png)
+
+Know that the person is 'known' (ie, at least one person 'part' is associated to
+a person ID)m the automatically-generated 'anonymous' person is replaced by the
+actual person.
+
+We are doing it manually here, but in practice, we want to do it automatically.
 
 ### Installing and running automatic face identification
+
+Let's install the `hri_face_identification` node:
+
+```
+cd ws/src
+git clone https://github.com/ros4hri/hri_face_identification.git
+cd ..
+```
+
+
+Then, build it:
+
+```
+catkin build hri_face_identification
+```
+
+> 💡 again, all the dependencies are already installed in the container. To do
+> it manually, run `rosdep install -r -y --from-paths src`.
+
+
+Start the node:
+
+```
+source install/setup.bash
+roslaunch hri_face_identification face_identification.launch
+```
+
+You can now check in the graph (or directly on the `/humans/candidate_matches`
+topic): the face should now be automatically associated to a person.
 
 ### Probabilistic feature matching
 
@@ -362,4 +410,24 @@ The algorithm used by `hri_person_manager` exploits the probabilities of *match*
 between each and all personal features perceived by the robot to find the most
 likely set of *partitions* of features into persons.
 
-If you want to know more about the exact algorithm, [check the 'Mr Potato' paper!](https://academia.skadge.org/publis/lemaignan2024probabilistic.pdf).
+For instance, from the following graph, try to guess which are the most likely
+'person' associations:
+
+![complex ROS4HRI graph](images/ex1.png)
+
+Response in the paper (along with the exact algorithm!): [the 'Mr Potato' paper](https://academia.skadge.org/publis/lemaignan2024probabilistic.pdf).
+
+## If you want more...!
+
+Here a few additional tasks you might want to try, to further explore ROS4HRI:
+
+- Write a small Python script that list on the console the people around the
+  robot ([hint!](https://www.phind.com/search?cache=rhu3n4zmjwshfp0h3vp29b9w)).
+
+- write a node (C++ or Python) to automatically match faces and bodies. One
+  approach consists in computing the overlap of the regions of interest of pairs
+  of (face, body), and compute a likelihood based on that.
+
+  Check the [`pyhri` API documentation](https://pyhri.readthedocs.io/en/latest/)
+  here, and the [C++ `libhri` API
+  documentation](http://docs.ros.org/en/noetic/api/hri/html/c++/) here.

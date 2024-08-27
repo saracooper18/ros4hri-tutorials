@@ -32,8 +32,7 @@ RUN apt-get update && apt-get install -y \
     liblapack-dev \
     ros-noetic-hri \
     ros-noetic-rospy \
-    ros-noetic-usb-cam \
-    terminator
+    ros-noetic-usb-cam
 
 # Update rosdep
 RUN rosdep update

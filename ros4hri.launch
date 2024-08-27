@@ -1,0 +1,27 @@
+<launch>
+    <!-- Launch the USB camera node with a specific camera_info_url parameter -->
+    <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen">
+        <param name="camera_info_url" value="file:///root/ros4hri_ws/src/ros4hri-tutorials/default_webcam_calibration.yml" />
+    </node>
+
+    <!-- Launch the hri_fullbody node with the RGB camera parameter -->
+    <include file="$(find hri_fullbody)/launch/hri_fullbody.launch">
+        <arg name="rgb_camera" value="usb_cam" />
+    </include>
+
+    <!-- Launch the face detection node with parameters for RGB camera and filtering frame -->
+    <include file="$(find hri_face_detect)/launch/detect.launch">
+        <arg name="rgb_camera" value="usb_cam" />
+        <arg name="filtering_frame" value="head_camera" />
+    </include>
+
+    <!-- Launch the face identification node -->
+    <include file="$(find hri_face_identification)/launch/face_identification.launch" />
+
+    <!-- Set the parameters for the humans reference frame and robot reference frame -->
+    <param name="/humans/reference_frame" value="head_camera" />
+    <param name="/humans/robot_reference_frame" value="head_camera" />
+
+    <!-- Launch the hri_person_manager node -->
+    <node name="hri_person_manager" pkg="hri_person_manager" type="hri_person_manager" output="screen" />
+</launch>

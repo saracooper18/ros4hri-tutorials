@@ -9,7 +9,8 @@ docker pull saracooper/ros4hri_noetic:v1
 ```
 
 You can also choose to build the dockerfile on your laptop by cloning this repository, and 
-building the docker on your machine:
+building the docker on your machine. Note that if you want to use exclusive PAL packages these
+are not built with this Dockerfile. 
 
 ```
 git clone https://github.com/saracooper18/ros4hri-tutorials.git
@@ -348,12 +349,114 @@ of this repository.
 With the information given, you can start creating your own applications! 
 For that have a look at the [`pyhri` API documentation](https://pyhri.readthedocs.io/en/latest/)
 here, and the [C++ `libhri` API documentation](http://docs.ros.org/en/noetic/api/hri/html/c++/) here.
+You can also have a look at the current standard messages of ROS4HRI 
+[`hri_msgs`] (https://github.com/ros4hri/hri_msgs) that covers many more than those in this tutorial. 
 
-Both are already installed in the docker. 
+Both are already installed in the docker. You have 2 example scripts already available in the example/ folder.
+Feel free to add your own scripts on this repo so other people can see them!
 
-There are some scripts in the example/ folder of this repository. For instance, pyhri_person_listing.py,
-lists on the console the people around the robot. Feel free to add your own scripts on this repo so
-other people can see them!
+**pyhri_person_listing.py**
+
+Lists on the console the people around the robot. 
+
+**engagement_expression.py**
+
+Computes the engagement of the user firstly using the nodes covered in this tutorial.
+
+It does this by using the visual social engagement metric that computes whether the person 
+and the robot are looking at each others (mutual gaze), and divide the result by the 
+distance (eg, you are considered to be engaged if you are looking at each other and sufficiently close.
+The algorithm is described [here] (https://academia.skadge.org/publis/webb2022measuring.pdf)
+
+As if you are using the laptop camera, the full body may not successfully detected, this example uses
+only the face information. 
+
+Engagement is published using the `/humans/persons/<id>/engagement_status` topic, a 
+[hri_msgs/EngagementLevel](http://docs.ros.org/en/noetic/api/hri_msgs/html/msg/EngagementLevel.html) message. 
+
+To test the example, first run the launcher that starts all the nodes:
+
+```
+cd /root/ros4hri_ws/src/ros4hri-tutorials/
+
+roslaunch ros4hri.launch
+```
+
+Note you can also start the nodes separately, only the usb_cam and hri_face_detect.
+
+Next on a different terminal, publish a static transform  between the webcam tf frame, 
+and the sellion_link (frame simulating the eyes of the robot):
+
+```
+rosrun tf static_transform_publisher  0 0 0 -0.5 0.5 -0.5 0.5 sellion_link /head_camera 50
+```
+
+On another one, run the script from ros4hri-tutorials/examples:
+
+```
+python3 engagement_expression.py
+```
+
+As you get closer to the webcam and look at, you should be able to see through ROS that 
+the engagement_status changes from 1 (DISENGAGED) to 3 (ENGAGED). 
+For feasibility we will set a fixed person_id named "thsiisme":
+
+```
+rostopic echo /humans/people/thisisme/engagement_status
+
+header:
+  seq: 125
+  stamp:
+	secs: 0
+	nsecs:     	0
+  frame_id: ''
+level: 1
+---
+header:
+  seq: 126
+  stamp:
+	secs: 0
+	nsecs:     	0
+  frame_id: ''
+level: 3
+```
+
+Now, to make the exercise more interactive, this example uses PAL Robotics TIAGo PRO
+robot eyes. To run this eyes on your laptop, run:
+
+roslaunch expressive_eyes expressive_eyes.launch 
+
+Open a GUI to visualise the output:
+
+```
+rqt_image_view
+```
+
+And change to `/robot_face/image_raw/compressed`.
+
+As you test your engagement, see how the robot is happy when you are engaged, and sad otherwise!
+
+![Happy TIAGO](images/tiago_happy.png)
+
+![Sad TIAGO](images/tiago_sad.png)
+
+You can play with other expressions defined in [Expression.msg](https://github.com/ros4hri/hri_msgs/blob/master/msg/Expression.msg).
+If you prefer you can change the eyes through the terminal by publishing directly to their ROS topic:
+
+```
+rostopic pub /robot_face/expression hri_msgs/Expression "header:
+  seq: 0
+  stamp: {secs: 0, nsecs: 0}
+  frame_id: ''
+expression: 'happy'
+valence: 0.0
+arousal: 0.0
+confidence: 0.0" 
+```
+
+
+
+
 
 
 

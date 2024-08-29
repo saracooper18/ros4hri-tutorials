@@ -421,7 +421,7 @@ only the face information.
 Engagement is published using the `/humans/persons/<id>/engagement_status` topic, a 
 [hri_msgs/EngagementLevel](http://docs.ros.org/en/noetic/api/hri_msgs/html/msg/EngagementLevel.html) message. 
 
-To test the example, first run the launcher that starts all the nodes:
+To test the example, you can simply run the whole launcher that will start all the relevant nodes:
 
 ```
 cd /root/ros4hri_ws/src/ros4hri-tutorials/
@@ -429,14 +429,7 @@ cd /root/ros4hri_ws/src/ros4hri-tutorials/
 roslaunch ros4hri.launch
 ```
 
-Note you can also start the nodes separately, only the usb_cam and hri_face_detect.
-
-Next on a different terminal, publish a static transform  between the webcam tf frame, 
-and the sellion_link (frame simulating the eyes of the robot):
-
-```
-rosrun tf static_transform_publisher  0 0 0 -0.5 0.5 -0.5 0.5 sellion_link /head_camera 50
-```
+Note you can also start the nodes separately if you prefer.
 
 On another one, run the script from ros4hri-tutorials/examples:
 
@@ -469,7 +462,8 @@ level: 3
 ```
 
 Now, to make the exercise more interactive, this example uses PAL Robotics TIAGo PRO
-robot eyes. To run this eyes on your laptop, run:
+robot eyes. The expressive_eyes is already executed with the helper launcher so you do not need
+to do anything. It basically runs this:
 
 ```
 roslaunch expressive_eyes expressive_eyes.launch 
@@ -506,15 +500,14 @@ confidence: 0.0"
 **mimic_emotions.py**
 
 This is a simple script that captures the emotion of the person, and mimics the emotion to TIAGo Pro's eyes, like in the 
-previous example. In order to run this demo, you can use the helper launch file that runs the usb camera, face and emotion
-detector, as well as expressive eyes. 
+previous example. In order to run this demo, you can use the helper launch file that runs all the ROS4HRI nodes mentioned in 
+this tutorial, including the emotion recognizer and the expressive eyes of the robot:
 
 ```
-cd /root/ros4hri_ws/src/ros4hri-tutorials/examples/
+cd /root/ros4hri_ws/src/ros4hri-tutorials/
 
-roslaunch expressions.launch
+roslaunch ros4hri.launch
 ```
-
 
 On another terminal, open the graphical interface to see the robot's eyes:
 

@@ -61,7 +61,7 @@ roscore
 ```
 
 
-### Test your laptop camera
+## Test your laptop camera
 
 For this tutorial you will need to have a working USB camera, which can be the one 
 integrated on your laptop. 
@@ -153,7 +153,7 @@ face being displayed, as well as its estimated 6D position:
 
 We are effectively running the face detector in a Docker container!
 
-### Body detection
+## Body detection
 
 Next, let's detect 3D skeletons in the image.
 
@@ -274,7 +274,7 @@ actual person.
 
 We are doing it manually here, but in practice, we want to do it automatically.
 
-### Running automatic face identification
+## Running automatic face identification
 
 In order to identify a specific person, we will use the [`hri_face_identification`](https://github.com/ros4hri/hri_face_identification) node. 
 
@@ -307,6 +307,53 @@ For instance, from the following graph, try to guess which are the most likely
 ![complex ROS4HRI graph](images/ex1.png)
 
 Response in the paper (along with the exact algorithm!): [the 'Mr Potato' paper](https://academia.skadge.org/publis/lemaignan2024probabilistic.pdf).
+
+## Emotion detection
+
+This node is still work-in-progress and only available to PAL customers. For the sake of the workshop however you have it available in the 
+docker when you pull it directly.
+
+The emotion recognizer uses [ONNX models](https://github.com/onnx/models/tree/main/validated/vision/body_analysis/emotion_ferplus).
+It takes as input the face detected by `hri_face_detect`,.
+
+In order to run it, assuming you already have the camera and the face detector running:
+
+roslaunch hri_emotion_recognizer emotion_recognizer.launch 
+
+Emotions will be published on the `/humans/faces/<id>/expression` topic, a 
+[hri_msgs/Expression](https://github.com/ros4hri/hri_msgs/blob/master/msg/Expression.msg). You can first check the face ID with:
+
+rostopic echo /humans/faces/tracked
+
+header: 
+  seq: 225
+  stamp: 
+    secs: 1724940941
+    nsecs: 169757334
+  frame_id: "head_camera"
+ids: 
+  - pcgxk
+
+
+And then check the respective expression:
+
+rostopic echo /humans/faces/pcgxk/expression 
+
+header: 
+  seq: 31
+  stamp: 
+    secs: 0
+    nsecs:         0
+  frame_id: ''
+expression: "\"neutral\""
+valence: 0.0
+arousal: 0.0
+confidence: 0.9395354986190796
+
+If you open Rviz, and the add the Humans plugin, just like you did for the previous cases, you will see the emotion is now
+written on top of the face bounding box.
+
+![Emotion output](images/output_emotion.png)
 
 
 ## Create a launcher that runs all together
@@ -424,7 +471,9 @@ level: 3
 Now, to make the exercise more interactive, this example uses PAL Robotics TIAGo PRO
 robot eyes. To run this eyes on your laptop, run:
 
+```
 roslaunch expressive_eyes expressive_eyes.launch 
+```
 
 Open a GUI to visualise the output:
 
@@ -454,9 +503,32 @@ arousal: 0.0
 confidence: 0.0" 
 ```
 
+**mimic_emotions.py**
+
+This is a simple script that captures the emotion of the person, and mimics the emotion to TIAGo Pro's eyes, like in the 
+previous example. In order to run this demo, you can use the helper launch file that runs the usb camera, face and emotion
+detector, as well as expressive eyes. 
+
+```
+cd /root/ros4hri_ws/src/ros4hri-tutorials/examples/
+
+roslaunch expressions.launch
+```
 
 
+On another terminal, open the graphical interface to see the robot's eyes:
 
+```
+rqt_image_view
+```
 
+And finally run the script with
 
+```
+cd /root/ros4hri_ws/src/ros4hri-tutorials/examples/
+
+python3 mimic_emotion.py
+```
+
+The emotions that are best detected are happy, surprised, anger and neutral, but play around if you can get more!
 

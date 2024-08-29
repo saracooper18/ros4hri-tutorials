@@ -532,3 +532,5 @@ python3 mimic_emotion.py
 
 The emotions that are best detected are happy, surprised, anger and neutral, but play around if you can get more!
 
+![Matching emotions](images/expresion_matching.png)
+

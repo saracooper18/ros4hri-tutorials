@@ -523,6 +523,8 @@ cd /root/ros4hri_ws/src/ros4hri-tutorials/examples/
 python3 mimic_emotion.py
 ```
 
+See a live demo: https://youtu.be/_g2ZKre8TmY
+
 The emotions that are best detected are happy, surprised, anger and neutral, but play around if you can get more!
 
 ![Matching emotions](images/expresion_matching.png)

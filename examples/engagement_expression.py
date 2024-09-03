@@ -130,8 +130,10 @@ class Person:
        
         if self.level == EngagementLevel.ENGAGED:
             expression_msg.expression = "happy"
+            print("user engaged")
         elif self.level == EngagementLevel.DISENGAGED:
             expression_msg.expression = "sad"
+            print("user disengaged")
         else:  # UNKNOWN
             expression_msg.expression = "neutral"
 

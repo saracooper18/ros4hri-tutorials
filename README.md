@@ -318,11 +318,12 @@ It takes as input the face detected by `hri_face_detect`,.
 
 In order to run it, assuming you already have the camera and the face detector running:
 
-roslaunch hri_emotion_recognizer emotion_recognizer.launch 
+`roslaunch hri_emotion_recognizer emotion_recognizer.launch`
 
 Emotions will be published on the `/humans/faces/<id>/expression` topic, a 
 [hri_msgs/Expression](https://github.com/ros4hri/hri_msgs/blob/master/msg/Expression.msg). You can first check the face ID with:
 
+```
 rostopic echo /humans/faces/tracked
 
 header: 
@@ -333,10 +334,11 @@ header:
   frame_id: "head_camera"
 ids: 
   - pcgxk
-
+```
 
 And then check the respective expression:
 
+```
 rostopic echo /humans/faces/pcgxk/expression 
 
 header: 
@@ -349,6 +351,7 @@ expression: "\"neutral\""
 valence: 0.0
 arousal: 0.0
 confidence: 0.9395354986190796
+```
 
 If you open Rviz, and the add the Humans plugin, just like you did for the previous cases, you will see the emotion is now
 written on top of the face bounding box.
@@ -409,11 +412,12 @@ Lists on the console the people around the robot.
 **engagement_expression.py**
 
 Computes the engagement of the user firstly using the nodes covered in this tutorial.
+See here the video demo of [engagement detection](https://youtu.be/5Kq0ouKfoIE)
 
 It does this by using the visual social engagement metric that computes whether the person 
 and the robot are looking at each others (mutual gaze), and divide the result by the 
-distance (eg, you are considered to be engaged if you are looking at each other and sufficiently close.
-The algorithm is described [here] (https://academia.skadge.org/publis/webb2022measuring.pdf)
+distance eg, you are considered to be engaged if you are looking at each other and sufficiently close.
+The algorithm is described [in this paper](https://academia.skadge.org/publis/webb2022measuring.pdf)
 
 As if you are using the laptop camera, the full body may not successfully detected, this example uses
 only the face information. 
@@ -495,7 +499,9 @@ confidence: 0.0"
 **mimic_emotions.py**
 
 This is a simple script that captures the emotion of the person, and mimics the emotion to TIAGo Pro's eyes, like in the 
-previous example. In order to run this demo, you can use the helper launch file that runs all the ROS4HRI nodes mentioned in  this tutorial, including the emotion recognizer and the expressive eyes of the robot:
+previous example. See here an example video of the [emotion mimicking demo](https://youtu.be/_g2ZKre8TmY).
+
+In order to run this demo, you can use the helper launch file that runs all the ROS4HRI nodes mentioned in  this tutorial, including the emotion recognizer and the expressive eyes of the robot:
 
 ```
 cd /root/ros4hri_ws/src/ros4hri-tutorials/
@@ -516,5 +522,7 @@ python3 mimic_emotion.py
 
 The emotions that are best detected are happy, surprised, anger and neutral, but play around if you can get more!
 
-![Matching emotions](images/expresion_matching.png)
+![Matching emotions](images/expression_matching.png)
 
+
+See h

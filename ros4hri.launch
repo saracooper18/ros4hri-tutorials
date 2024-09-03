@@ -33,4 +33,9 @@
 
     <!-- HRI Person Manager -->
     <node name="hri_person_manager" pkg="hri_person_manager" type="hri_person_manager" output="screen" />
+
+    <!-- Launch Rviz and rqt_image_view -->
+    <node name="rviz" pkg="rviz" type="rviz" output="screen"/>
+    <node name="rqt_image_view" pkg="rqt_image_view" type="rqt_image_view" output="screen"/>
+
 </launch>

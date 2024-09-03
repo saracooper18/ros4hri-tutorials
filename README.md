@@ -469,13 +469,8 @@ to do anything. It basically runs this:
 roslaunch expressive_eyes expressive_eyes.launch 
 ```
 
-Open a GUI to visualise the output:
-
-```
-rqt_image_view
-```
-
-And change to `/robot_face/image_raw/compressed`.
+You will notice with the launcher Rviz and rqt_image_view were also already run. In rqt_image_view,
+change the topic, if not done already, to `/robot_face/image_raw/compressed`.
 
 As you test your engagement, see how the robot is happy when you are engaged, and sad otherwise!
 
@@ -500,8 +495,7 @@ confidence: 0.0"
 **mimic_emotions.py**
 
 This is a simple script that captures the emotion of the person, and mimics the emotion to TIAGo Pro's eyes, like in the 
-previous example. In order to run this demo, you can use the helper launch file that runs all the ROS4HRI nodes mentioned in 
-this tutorial, including the emotion recognizer and the expressive eyes of the robot:
+previous example. In order to run this demo, you can use the helper launch file that runs all the ROS4HRI nodes mentioned in  this tutorial, including the emotion recognizer and the expressive eyes of the robot:
 
 ```
 cd /root/ros4hri_ws/src/ros4hri-tutorials/
@@ -509,21 +503,16 @@ cd /root/ros4hri_ws/src/ros4hri-tutorials/
 roslaunch ros4hri.launch
 ```
 
-On another terminal, open the graphical interface to see the robot's eyes:
+You will notice with the launcher Rviz and rqt_image_view were also already run. In rqt_image_view,
+change the topic, if not done already, to `/robot_face/image_raw/compressed`.
 
-```
-rqt_image_view
-```
-
-And finally run the script with
+And finally run the script on another terminal with:
 
 ```
 cd /root/ros4hri_ws/src/ros4hri-tutorials/examples/
 
 python3 mimic_emotion.py
 ```
-
-See a live demo: https://youtu.be/_g2ZKre8TmY
 
 The emotions that are best detected are happy, surprised, anger and neutral, but play around if you can get more!
 
